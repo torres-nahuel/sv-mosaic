@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { url } from "../utils/formUrls";
+import { AdvancedFiltersComponent } from "./AdvancedFiltersComponent";
 import { ColumnsComponent } from "./ColumnsComponent";
 import { PaginationComponent } from "./PaginationComponent";
 import { SaveAsComponent } from "./SaveAsComponent";
@@ -10,6 +11,7 @@ export class DataviewPage {
 	readonly saveAsComponent: SaveAsComponent;
 	readonly paginationComponent: PaginationComponent;
 	readonly columnsComponent: ColumnsComponent;
+	readonly advancedFilterComponent: AdvancedFiltersComponent;
 	readonly createNewBtn: Locator;
 	readonly dialog: Page;
 	readonly editIcon: Locator;
@@ -30,6 +32,7 @@ export class DataviewPage {
 		this.saveAsComponent = new SaveAsComponent(page);
 		this.paginationComponent = new PaginationComponent(page);
 		this.columnsComponent = new ColumnsComponent(page);
+		this.advancedFilterComponent = new AdvancedFiltersComponent(page);
 		this.createNewBtn = page.locator("[data-mosaic-id=button_create]");
 		this.editIcon = page.locator("[data-mosaic-id=action_primary_edit] button");
 		this.moreOptions = page.locator("[data-mosaic-id='additional_actions_dropdown'] button");
@@ -93,5 +96,16 @@ export class DataviewPage {
 
 	async getColumnHeadersCount(): Promise<number> {
 		return this.columnHeaders.count();
+	}
+	
+	async getCategoriesFromRow(): Promise<string[]> {
+		await this.dataviewTable.waitFor({state: "visible"});
+		await this.loading.waitFor({state: "detached"});
+		const rows = await this.dataviewTable.locator("tr").elementHandles();	
+		const categoriesPerRow = [];
+        for(const row of rows) {
+			categoriesPerRow.push(await (await row.$("td:nth-child(5)")).textContent());
+		}
+		return categoriesPerRow;
 	}
 }
