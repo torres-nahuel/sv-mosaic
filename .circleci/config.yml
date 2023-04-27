@@ -116,6 +116,7 @@ jobs:
           username: _json_key
           password: $GCLOUD_SERVICE_KEY
     resource_class: large
+    working_directory: /automation_testing
     steps:
       - run:
           name: Download dependency
