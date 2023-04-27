@@ -121,6 +121,8 @@ jobs:
       - run:
           name: Download dependency
           command: npm ci
+      - run: npm i -D @playwright/test
+      - run: npx playwright install
       - run:
           name: Run Automation Tests
           command: ENV=local npm run test:chrome tests
