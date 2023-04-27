@@ -41,7 +41,8 @@ workflows:
             - build
           filters:
             branches:
-              ignore: /.*/
+              only:
+                - MOS-766-run-automation-tests-with-circleci
 
 orbs:
   slack: circleci/slack@4.4.0
