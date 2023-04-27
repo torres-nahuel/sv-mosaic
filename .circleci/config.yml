@@ -41,9 +41,7 @@ workflows:
             - build
           filters:
             branches:
-              only:
-                - develop
-                - /pull.*/
+              ignore: /.*/
 
 orbs:
   slack: circleci/slack@4.4.0
