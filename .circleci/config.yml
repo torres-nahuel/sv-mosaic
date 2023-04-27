@@ -119,6 +119,9 @@ jobs:
     resource_class: large
     steps:
       - run:
+          name: Download dependency
+          command: npm ci
+      - run:
           name: Run Automation Tests
           command: ENV=local npm run test:chrome tests
       - store_test_results:
