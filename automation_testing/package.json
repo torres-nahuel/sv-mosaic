@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:chrome": "playwright test --config=sv-mosaic.config.ts --project=Chromium",
+    "test:chrome": "ENV=local playwright test --config=sv-mosaic.config.ts --project=Chromium",
     "test:firefox": "playwright test --config=sv-mosaic.config.ts --project=Firefox",
     "test:webkit": "playwright test --config=sv-mosaic.config.ts --project=Webkit"
   },
