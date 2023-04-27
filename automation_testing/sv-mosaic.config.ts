@@ -1,10 +1,10 @@
-import { PlaywrightTestConfig } from "@playwright/test";
+import { devices, PlaywrightTestConfig } from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
 
-	testDir: "tests",
+	testDir: "./tests",
 	use: {
-		headless: true,
+		headless: process.env.CI ? true : false,
 		viewport: { width: 1280, height: 720 },
 		actionTimeout: 1500000,
 		ignoreHTTPSErrors: true,
@@ -13,18 +13,21 @@ const config: PlaywrightTestConfig = {
 		video: "off",
 		screenshot: "off"
 	},
-	retries: 1,
-	timeout: 200000,
-	reporter: [ ["html", { open: "never", outputFolder: "./playwright-report"}] ],
+	retries: process.env.CI ? 2 : 1,
+	timeout: 1 * 30 * 1000,
+	expect: {
+		timeout: 5000
+	},
+	reporter: process.env.CI ? [["junit", { outputFile: "testResults.xml" }]] : [ ["html", { open: "never", outputFolder: "./playwright-report"}] ],
 	workers: process.env.CI ? 2 : 4,
 	projects: [
 		{
 			name: "Chromium",
-			use: { browserName: "chromium" },
+			use: { ...devices["Desktop Chrome"] },
 		},
 		{
 			name: "Firefox",
-			use: { browserName: "firefox" },
+			use: { ...devices["Desktop Firefox"] },
 		},
 		{
 			name: "Webkit",

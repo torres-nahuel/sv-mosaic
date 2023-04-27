@@ -35,6 +35,15 @@ workflows:
               only:
                 - develop
                 - /pull.*/
+      - run_automation_tests:
+          context: default
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - /pull.*/
 
 orbs:
   slack: circleci/slack@4.4.0
@@ -101,3 +110,16 @@ jobs:
       - run:
           name: Unit tests
           command: yarn test
+  run_automation_tests:
+    docker:
+      - image: gcr.io/sv-shared-231700/sv-mosaic:${CIRCLE_BRANCH}
+        auth:
+          username: _json_key
+          password: $GCLOUD_SERVICE_KEY
+    resource_class: large
+    steps:
+      - run:
+          name: Run Automation Tests
+          command: ENV=local npm run test:chrome tests
+      - store_test_results:
+          path: testResults.xml
